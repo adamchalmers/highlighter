@@ -41,7 +41,13 @@ fn main() -> ExitCode {
 fn print_highlight(start: usize, end: Option<usize>, string: &str) {
     let end = end.unwrap_or(start + 1);
     print!("{}", &string[..start]);
-    let red = format!("\x1b[31m{}\x1b[0m", &string[start..end]);
-    print!("{red}");
+    let to_highlight = &string[start..end];
+    let msg = if to_highlight.chars().all(|ch| ch.is_whitespace()) {
+        "\x1b[41m \x1b[0m"
+    } else {
+        &format!("\x1b[31m{}\x1b[0m", &to_highlight)
+    };
+
+    print!("{msg}");
     print!("{}", &string[end..]);
 }
